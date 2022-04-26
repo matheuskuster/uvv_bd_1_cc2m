@@ -1,0 +1,55 @@
+version: '3.1'
+
+services:
+  uvv-mysql:
+    image: mysql
+    platform: linux/amd64
+    environment:
+      MYSQL_ROOT_PASSWORD: "mysql"
+    ports:
+      - "3306:3306"
+    volumes:
+      - /Users/matheuskuster/Develop/uvv/db/mysql/data:/var/lib/mysql
+    networks:
+      - uvv-mysql-network
+
+  uvv-phpmyadmin:
+    image: phpmyadmin
+    restart: always
+    ports:
+      - 8080:80
+    environment:
+      - PMA_ARBITRARY=1
+    networks:
+      - uvv-mysql-network
+
+  uvv-postgres:
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: "postgres"
+    ports:
+      - "15432:5432"
+    volumes:
+      - /Users/matheuskuster/Develop/uvv/db/postgres/data:/var/lib/postgresql/data 
+    networks:
+      - uvv-postgres-network
+      
+  uvv-pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "matheuskuster@hotmail.com"
+      PGADMIN_DEFAULT_PASSWORD: "postgres"
+    ports:
+      - "8080:80"
+    depends_on:
+      - uvv-postgres
+    networks:
+      - uvv-postgres-network
+
+networks: 
+  uvv-mysql-network:
+    driver: bridge
+  
+  uvv-postgres-network:
+    driver: bridge
