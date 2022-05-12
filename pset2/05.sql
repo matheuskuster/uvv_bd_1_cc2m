@@ -1,20 +1,15 @@
 -- -----------------------------------------------------------------------------------
 -- Design e Desenvolvimento de Banco de Dados (PSET1) - POSTGRES
--- 0012
+-- 0005
 -- -----------------------------------------------------------------------------------
 -- Por: Matheus Kuster Rosa (CC2M)
 --      matheuskuster@hotmail.com
 -- -----------------------------------------------------------------------------------
 
-SELECT CONCAT(f.primeiro_nome, ' ', f.nome_meio, '. ', f.ultimo_nome) AS nome_funcionario
-, d.nome_departamento
-, p.nome_projeto
-FROM funcionario AS f
-JOIN trabalha_em AS t
-ON t.cpf_funcionario = f.cpf
-JOIN projeto AS p
-ON p.numero_projeto = t.numero_projeto
-JOIN departamento AS d
-ON p.numero_departamento = d.numero_departamento
-WHERE t.horas IS NULL
-AND t.numero_projeto IS NOT NULL;
+SELECT d.nome_departamento, CONCAT(f.primeiro_nome, ' ', f.nome_meio, '. ', f.ultimo_nome) AS nome, f.salario,
+CASE
+	WHEN f.cpf = d.cpf_gerente THEN 'Gerente'
+  ELSE 'Funcionario'
+END AS posicao
+FROM departamento AS d JOIN funcionario AS f ON d.numero_departamento = f.numero_departamento
+ORDER BY d.nome_departamento ASC, f.salario DESC;

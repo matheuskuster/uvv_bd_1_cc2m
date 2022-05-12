@@ -1,20 +1,19 @@
 -- -----------------------------------------------------------------------------------
 -- Design e Desenvolvimento de Banco de Dados (PSET1) - POSTGRES
--- 0012
+-- 0006
 -- -----------------------------------------------------------------------------------
 -- Por: Matheus Kuster Rosa (CC2M)
 --      matheuskuster@hotmail.com
 -- -----------------------------------------------------------------------------------
 
 SELECT CONCAT(f.primeiro_nome, ' ', f.nome_meio, '. ', f.ultimo_nome) AS nome_funcionario
-, d.nome_departamento
-, p.nome_projeto
+, depa.nome_departamento
+, depe.nome_dependente
+, DATE_PART('year', AGE(depe.data_nascimento)) AS idade_dependente
+, CASE (depe.sexo)
+		WHEN 'M' THEN 'Masculino'
+  	ELSE 'Feminino'
+  END AS sexo_dependente
 FROM funcionario AS f
-JOIN trabalha_em AS t
-ON t.cpf_funcionario = f.cpf
-JOIN projeto AS p
-ON p.numero_projeto = t.numero_projeto
-JOIN departamento AS d
-ON p.numero_departamento = d.numero_departamento
-WHERE t.horas IS NULL
-AND t.numero_projeto IS NOT NULL;
+JOIN dependente AS depe ON f.cpf = depe.cpf_funcionario
+JOIN departamento AS depa ON depa.numero_departamento = f.numero_departamento;

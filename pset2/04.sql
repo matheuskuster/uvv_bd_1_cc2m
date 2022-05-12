@@ -1,20 +1,16 @@
 -- -----------------------------------------------------------------------------------
 -- Design e Desenvolvimento de Banco de Dados (PSET1) - POSTGRES
--- 0012
+-- 0004
 -- -----------------------------------------------------------------------------------
 -- Por: Matheus Kuster Rosa (CC2M)
 --      matheuskuster@hotmail.com
 -- -----------------------------------------------------------------------------------
 
-SELECT CONCAT(f.primeiro_nome, ' ', f.nome_meio, '. ', f.ultimo_nome) AS nome_funcionario
-, d.nome_departamento
-, p.nome_projeto
-FROM funcionario AS f
-JOIN trabalha_em AS t
-ON t.cpf_funcionario = f.cpf
-JOIN projeto AS p
-ON p.numero_projeto = t.numero_projeto
-JOIN departamento AS d
-ON p.numero_departamento = d.numero_departamento
-WHERE t.horas IS NULL
-AND t.numero_projeto IS NOT NULL;
+SELECT CONCAT(primeiro_nome, ' ', nome_meio, '. ', ultimo_nome) AS nome_completo
+, DATE_PART('year', AGE(data_nascimento)) AS idade_em_anos
+, salario
+, CASE
+		WHEN salario < 35000 THEN salario * 1.2
+  	ELSE salario * 1.15
+  END AS reajuste
+FROM funcionario;
